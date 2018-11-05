@@ -1,71 +1,180 @@
-console.log('Démarrage Morpion !');
-let table = document.getElementsByClassName('morpion')[0];
-let tour = 0;
+// Utilisation d'une IIFE (Immediately invoked function expression).
+(function() {
+	// L'objet console permet de sortir des logs et des informations
+	// détaillée sur les objets du DOM.
+	console.log('Démarrage du Morpion !');
+
+	let Player = function(username, className) {
+		this.username = username;
+		this.className = className;
+		this.score=0
+		this.index = null;
+		this.getName = function() {
+			return this.username;
+		};
+	};
+
+	var Game = function() {
+		this.maxRound=0;
+		this.roundCount=0;
+		this.turnCount = 0;
+        this.listPlayers = [
+				new Player("",'cross'),
+                new Player("",'circule')
+            ]
+        this.data =[[],[],[]];
+		this.playing = false;
+		this.initialize = function() {
+			event.preventDefault();
+			// Récupérer chaque td de la table et associer
+			// une fonction play() sur l'événement 'click'.
+			this.maxRound= document.getElementById('nbManche').value;
+			this.listPlayers[0].username = document.getElementById('J1').value;
+			this.listPlayers[1].username = document.getElementById('J2').value;
+			console.log(this.maxRound);
+			console.log('init');
+			this.roundCount=1;
+			this.initializeTurn();
+			this.listPlayers[0].score=0;
+			this.listPlayers[1].score=0;
+			refreshRound();
+			refreshScore();
+		};
+
+		this.initializeTurn = function() {
+		// Récupérer chaque td de la table et associer
+			// une fonction play() sur l'événement 'click'.
+			this.turnCount++;
+			this.playing=true;
+			this.turnCount = 0;
+			this.data =[[],[],[]];
+			var cells = document.querySelectorAll('table.morpion td');
+			cells.forEach((cell,index,list) => {
+				if(cell.hasChildNodes()){cell.removeChild(cell.childNodes[0])} ;
+				cell.addEventListener("click",this.play);
+			});
+			refreshRound();
+			
+
+		};
+		
+		this.play = function(event){
+			if(hyperpion.playing==true){
+				let a=null;
+				let b=null;
+				
+				switch (hyperpion.turnCount%2){
+
+					case 0:
+					let eTarget = event.target
+					let croix=document.createElement('h1');
+					croix.className='croix';
+					croix.innerHTML='X';
+					eTarget.appendChild(croix);
+					a=event.path[1].className.charAt(5).valueOf();
+					b=event.target.className.charAt(5).valueOf();
+					hyperpion.data[a][b] = hyperpion.listPlayers[0];
+					break;
+
+					case 1:
+					event.target.className+='J2'
+					let rond=document.createElement('div');
+					rond.className='rond';
+					event.target.appendChild(rond);
+					a=event.path[1].className.charAt(5).valueOf();
+					b=event.target.className.charAt(5).valueOf();
+					hyperpion.data[a][b] = hyperpion.listPlayers[1];
+					break;
+				}
+				event.target.removeEventListener("click",hyperpion.play);
+				hyperpion.turnCount++;
+
+				var result=checkVictory();
+				if(result!=null | hyperpion.turnCount ==9){
+					stopGame(result);
+				}
+			}
+			
+			if (hyperpion.playing==false){
+				
+				hyperpion.initialize();
+			
+			}
+			
+		}
+
+		function checkVictory(){
+			var won=null;
+			for(var i=0;i<3;i++){
+				if(hyperpion.data[i][0]==hyperpion.data[i][1] && hyperpion.data[i][1]==hyperpion.data[i][2]){
+					won=hyperpion.data[i][0];
+					break;
+				}
+				if(hyperpion.data[0][i]==hyperpion.data[1][i] && hyperpion.data[1][i]==hyperpion.data[2][i]){
+					won=hyperpion.data[0][i];
+					break;
+				}
+			}
+			if(hyperpion.data[0][0]==hyperpion.data[1][1] && hyperpion.data[1][1]==hyperpion.data[2][2]){
+				won=hyperpion.data[1][1];
+			}	
+			if(hyperpion.data[0][2]==hyperpion.data[1][1] && hyperpion.data[1][1]==hyperpion.data[2][0]){
+				won=hyperpion.data[0][2];
+			}	
+			return won
+		}
 
 
-//Fonction vérification gagnant
+		
+		function stopGame(result){
+			
+			if(result==null){
+				setTimeout(function(){alert('Egalité')})
+			} else{
+				result.score++;
+				setTimeout(function(){alert('Le joueur ' + result.username + ' à gagner la manche')})	
+			}	
+			if(++hyperpion.roundCount>hyperpion.maxRound && hyperpion.listPlayers[0].score !=hyperpion.listPlayers[1].score){endRound()}
+			 
+			refreshScore();
+		}
 
+		function refreshScore(){
+			var newScore;
+			if(hyperpion.roundCount>hyperpion.maxRound && hyperpion.listPlayers[0].score ==hyperpion.listPlayers[1].score){
+				newScore=document.createTextNode("Score : "+ hyperpion.listPlayers[0].username +" " + hyperpion.listPlayers[0].score+" | "+hyperpion.listPlayers[1].username+" "+hyperpion.listPlayers[1].score+" - Mort subite !");
+			}else{
+				newScore=document.createTextNode("Score : "+ hyperpion.listPlayers[0].username +" " + hyperpion.listPlayers[0].score+" | "+hyperpion.listPlayers[1].username+" "+hyperpion.listPlayers[1].score);
+			}
+			let oldScore=document.getElementById('score').childNodes[0];
+			oldScore.replaceChild(newScore,oldScore.childNodes[0]);
+		}
 
-//Fonction Match Nul
-let matchNul = document.createElement('div');
-matchNul.style.zIndex = '+1';
-matchNul.style.position = 'absolute';
-matchNul.style.textAlign = 'center';
-matchNul.style.width = '200px';
-matchNul.style.height = '125px';
-matchNul.style.fontSize = '20';
-matchNul.innerText = 'MATCH NUL !';
-function fMatchNul() {
-    if (tour==9) {
-        console.log('Match Nul !');
-        event.target.appendChild(matchNul);
-    };
-};
+		function refreshRound(){
+			let newManche=document.createTextNode("Manche : "+hyperpion.roundCount + "/" + hyperpion.maxRound);
+			let oldManche=document.getElementById('manche').childNodes[0];
+			oldManche.replaceChild(newManche,oldManche.childNodes[0]);
+		}
 
-table.addEventListener('click', function(event) {
-    let cercle = document.createElement('div');
-    cercle.style.height = '70px';
-    cercle.style.width = '70px';
-    cercle.style.margin = 'auto';
-    cercle.style.border = '5px solid blue';
-    cercle.style.borderRadius = '50%';
+		function endRound(){
+			if(hyperpion.listPlayers[0].score>hyperpion.listPlayers[1].score){
+				var winner = hyperpion.listPlayers[0];
+			}
+			else{var winner = hyperpion.listPlayers[1];}
+			
+			setTimeout(function(){alert('Le joueur ' + winner.username + ' à gagner la partie')})
+			
+			hyperpion.playing=false;
+			
+			setTimeout(function(){alert('merci de REDÉMARER le jeu')})
+			
+		}
 
-    let croix = document.createElement('h1');
-    croix.style.height = '70px';
-    croix.style.width = '70px';
-    croix.style.margin = 'auto';
-    croix.innerText = '<h1>X</h1>';
-    croix.style.textAlign = 'center';
-    
-    
-    while(tour<9){ 
+		
 
-        tour=tour+1;    
-        console.log('On est dans le while');
-        console.log('tour ='+ tour);
-        if ((tour%2) != 0) { //Player 1 joue
+	};
 
-            console.log('Tour Joueur 1');
-            event.target.appendChild(cercle);
-            break;
-        } else if ((tour%2) == 0){ //Player 2 joue
+    window.hyperpion = new Game();
 
-            console.log('Tour Joueur 2');
-            event.target.appendChild(croix);
-            break;
-        }
-        break;
-    }
-    fMatchNul();
-});
-
-
-
-
-// document.querySelectorAll('table morpion td').forEach((cell, index, list) =>{
-//     console.log(cell, index, list)
-// });
-// --> va chercher tous les td de la table de classe 'morion'.
-// 
-// classlist -> donne un tableau
-// classList[0].split('-')[1] -> donne l'indice de la case
+	
+})();

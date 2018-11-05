@@ -1,43 +1,67 @@
+<!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8">
-        <!-- CDN JQuery -->
-		<script src="https://code.jquery.com/jquery-3.3.1.min.js"
-        integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
-        <!-- CDN Bootstrap 3 -->
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
-        integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
-        integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
-        integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-        <link rel="stylesheet" href="morpion.css"/>
-        <script src="appcorrection.js"></script>
-        <title>Morpion</title>
-    </head>
-    <body onload="Morpion.initialize()">
-        <h1>Mon Premier Morpion</h1>
-        <div>
-            <input class="btn btn-primary" type="submit" value="Nouvelle partie">
-        </div>
-        <div class="container">
-            <table class="morpion" id="grille">
-                <tr class="line=0">
-                    <td class="cell-0"></td>
-                    <td class="cell-1"></td>
-                    <td class="cell-2"></td>
-                </tr>
-                <tr class="line=1">
-                    <td class="cell-0"></td>
-                    <td class="cell-1"></td>
-                    <td class="cell-2"></td>                
-                </tr>
-                <tr class="line=2">
-                    <td class="cell-0"></td>
-                    <td class="cell-1"></td>
-                    <td class="cell-2"></td>               
-                </tr>
+<head>
+    <meta charset="UTF-8"/>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="app.css"/>
+    <script src="app.js"></script>
+	<title>MorpionJS</title>
+</head>
+<body>
+    <header>
+        <h1>Jeu du morpion</h1></header><br/>
+    </header>
+
+    <div class="container-fluid">
+        <form onsubmit="hyperpion.initialize()">
+            <legend>Parametrer une nouvelle partie</legend>
+            <div class="form-row">
+                <div class="col">
+                    <label for="nbManche">Nombre de manche</label>
+                    <input type="number" min="0" id="nbManche" class="form-control">
+                </div>
+                <div class="col">
+                    <label for="J1">Nom Joueur Croix</label>
+                    <input type="text"  id="J1" class="form-control">
+                </div>
+                <div class="col">
+                    <label for="J2">Nom Joueur Rond</label>
+                    <input type="text"  id="J2" class="form-control">
+                </div>
+                <button class="btn btn-success">Demarrer !</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="raw">
+    <div id="manche"><h2>Manche : 0/3 </h2></div>
+    <div id="score"><h2>Score : Rond 0 | Croix 0 </h2></div>
+    <section class="container-fluid">
+            <table class="morpion">
+                <caption></caption>
+                <tbody>
+                    <tr class="line-0">
+                        <td class="cell-0" ></td>  
+                        <td class="cell-1" ></td>   
+                        <td class="cell-2"></td>    
+                    </tr>
+                    <tr class="line-1">
+                        <td class="cell-0" ></td>  
+                        <td class="cell-1" ></td>   
+                        <td class="cell-2"></td>     
+                    </tr>
+                    <tr class="line-2">
+                        <td class="cell-0" ></td>  
+                        <td class="cell-1" ></td>   
+                        <td class="cell-2"></td>      
+                    </tr>
+                </tbody>
             </table>
-        </div>
-    </body>
+            <button class="nouvellePartie btn btn-success" onclick='hyperpion.initializeTurn()'>Lancer une nouvelle manche</button>
+        </section>
+    </div>
+</body>
 </html>

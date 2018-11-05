@@ -1,0 +1,40 @@
+form{
+    margin: auto;
+}
+h1, h2{
+
+    text-align: center;
+}
+
+
+td {
+    height: 100px;
+    width: 100px;
+    border: 1px solid grey;
+}
+
+.morpion{
+    margin: auto;
+}
+
+.nouvellePartie{
+    margin-left: 50%;
+    position: relative;
+    right: 95px; 
+
+}
+
+.rond{
+    
+    height:70%;
+    width:70%;
+    margin:auto;
+    border:5px solid red;
+    border-radius: 50%;
+}
+
+.croix{
+    text-Align:center;
+    margin:auto;
+}
+
